@@ -17,7 +17,7 @@ fi
 if [ -d /usr/local/psa ];
 	then
 		echo "This is Plesk"
-		plesk db -e 'show databases' | while read dbname; do plesk db dump --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
+		plesk db -N -e 'show databases' | while read dbname; do plesk db dump --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
 	else
 		echo "This is Cpanel/Linux"
 		mysql -N -e 'show databases' | while read dbname; do mysqldump --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
