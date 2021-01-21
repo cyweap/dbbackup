@@ -16,5 +16,6 @@ if [ -d /dbbackup/"$(date +%d%m%Y)" ];
 fi
 mysql -N -e 'show databases' | while read dbname; do mysqldump --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
 
-find /dbbackup/ -type d -mtime +7 -delete
-
+find /dbbackup/ -type d -mtime +7 -print
+find /dbbackup/ -type d -mtime +7 -exec rm -f {} \;
+exit
