@@ -14,7 +14,7 @@ if [ -d /dbbackup/"$(date +%d%m%Y)" ];
 		mkdir /dbbackup/"$(date +%d%m%Y)"
 		echo "$(date +%d%m%Y) Directory Created"
 fi
-if [ -d /usr/sbin/plesk ];
+if [ -d /usr/local/psa ];
 	then
 		echo "This is Plesk"
 		plesk db -e 'show databases' | while read dbname; do plesk db dump --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
