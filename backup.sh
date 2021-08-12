@@ -1,6 +1,6 @@
 #!/bin/bash
-dbuser='<User name>'
-dbpasswd='<Password>'
+dbuser='root'
+dbpasswd='12345'
 dbhost='localhost'
 configfile=$PWD/config.cnf
 if [ -f $PWD/config.cnf ];
@@ -28,12 +28,13 @@ if [ -d /dbbackup/"$(date +%d%m%Y)" ];
                 mkdir /dbbackup/"$(date +%d%m%Y)"
                 echo "$(date +%d%m%Y) Directory Created"
 fi
+# IF FACING FOLLOWING ERROR PLEASE UNCOMMENT 34 NO LINE
+#(mysqldump: Couldn't execute 'SELECT /*!40001 SQL_NO_CACHE */ * FROM `GLOBAL_STATUS`': The 'INFORMATION_SCHEMA.GLOBAL_STATUS' feature is disabled; see the documentation for 'show_compatibility_56' (3167)#
 
-mysql --defaults-extra-file=$configfile -N -e 'set @@global.show_compatibility_56=ON'
+#mysql --defaults-extra-file=$configfile -N -e 'set @@global.show_compatibility_56=ON'
 
-mysql --defaults-extra-file=$configfile -N -e 'show databases' | while read dbname; do mysqldump --defaults-extra-file=$configfile --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
+mysql --defaults-extra-file=$configfile -N -e 'show databases' | grep -v 'information_schema\|mysql\|performance_schema\|phpmyadmin\|sys'| while read dbname; do mysqldump --defaults-extra-file=$configfile --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
 
 find /dbbackup/ -type d -mtime +29 -print
 find /dbbackup/ -type d -mtime +29 -exec rm -rf {} \;
-echo "Your Backup Successful Done"
 exit
