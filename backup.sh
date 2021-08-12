@@ -38,7 +38,7 @@ mysql --defaults-extra-file=$configfile -N -e 'show databases' | grep -v 'inform
 #Backup Details
 echo "BackUp Location /dbbackup/$(date +%d%m%Y)" > $PWD/backupreport"$(date +%d%m%Y)".txt
 echo "BackUp DatabaseFiles" >> $PWD/backupreport"$(date +%d%m%Y)".txt
-ll /dbbackup/$(date +%d%m%Y) >> $PWD/backupreport"$(date +%d%m%Y)".txt
+ls -al /dbbackup/$(date +%d%m%Y) >> $PWD/backupreport"$(date +%d%m%Y)".txt
 
 echo "30 days deleted files list" >> $PWD/backupreport"$(date +%d%m%Y)".txt
 find /dbbackup/ -type d -mtime +29 -print >> $PWD/backupreport"$(date +%d%m%Y)".txt
