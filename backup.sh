@@ -14,7 +14,7 @@ if [ -f $PWD/config.cnf ];
 		echo "host=$dbhost" >> $configfile
 		echo "config.cnf File Created"
 fi
-if [ -d /dbbackup ];
+if [ -d /dbbackup ]; # By default backup location is "/dbbackup"
         then
                 echo "DBBACKUP Directory Found"
         else
@@ -35,6 +35,18 @@ fi
 
 mysql --defaults-extra-file=$configfile -N -e 'show databases' | grep -v 'information_schema\|mysql\|performance_schema\|phpmyadmin\|sys'| while read dbname; do mysqldump --defaults-extra-file=$configfile --complete-insert --routines --triggers --single-transaction "$dbname" | gzip > /dbbackup/"$(date +%d%m%Y)"/"$dbname""$(date +%d%m%Y)".sql.gz; done
 
-find /dbbackup/ -type d -mtime +29 -print
+#Backup Details
+echo "BackUp Location /dbbackup/$(date +%d%m%Y)" > $PWD/backupreport"$(date +%d%m%Y)".txt
+echo "BackUp DatabaseFiles" >> $PWD/backupreport"$(date +%d%m%Y)".txt
+ll /dbbackup/$(date +%d%m%Y) >> $PWD/backupreport"$(date +%d%m%Y)".txt
+
+echo "30 days deleted files list" >> $PWD/backupreport"$(date +%d%m%Y)".txt
+find /dbbackup/ -type d -mtime +29 -print >> $PWD/backupreport"$(date +%d%m%Y)".txt
 find /dbbackup/ -type d -mtime +29 -exec rm -rf {} \;
+
+cat $PWD/backupreport"$(date +%d%m%Y)".txt
+echo "Backup successfully completed"
+
+#for email report
+#mail -s "Backup successfully completed" -t user@example.com -A backup.zip < $PWD/backupreport"$(date +%d%m%Y)".txt
 exit
