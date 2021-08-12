@@ -1,6 +1,6 @@
 #!/bin/bash
-dbuser='root'
-dbpasswd='12345'
+dbuser='<db user name>'
+dbpasswd='<db password>'
 dbhost='localhost'
 configfile=$PWD/config.cnf
 if [ -f $PWD/config.cnf ];
