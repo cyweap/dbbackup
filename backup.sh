@@ -1,4 +1,7 @@
 #!/bin/bash
+#################################################################
+#################CYWEAP##########################################
+#################################################################
 dbuser='<db user name>'
 dbpasswd='<db password>'
 dbhost='localhost'
@@ -48,5 +51,5 @@ cat $PWD/backupreport"$(date +%d%m%Y)".txt
 echo "Backup successfully completed"
 
 #for email report
-#mail -s "Backup successfully completed" -t user@example.com -A backup.zip < $PWD/backupreport"$(date +%d%m%Y)".txt
+#mail -s "Backup successfully completed" -t user@example.com < $PWD/backupreport"$(date +%d%m%Y)".txt
 exit
